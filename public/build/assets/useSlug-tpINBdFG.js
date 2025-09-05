@@ -1,0 +1,1 @@
+function o(r=""){return r.toString().toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\-_\s]/g,"").trim().replace(/[\s_]+/g,"-").replace(/\-+/g,"-").replace(/(^-+|-+$)/g,"")}function n(r){return`https://bhorershomony.com/${r}`}export{n as m,o as s};
