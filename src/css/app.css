@@ -1,0 +1,26 @@
+@import "tailwindcss" source('../../src/');
+@plugin "@tailwindcss/typography";
+
+@font-face {
+  font-family: 'Noto Sans Bengali';
+  src: url('/assets/fonts/NotoSansBengali-VariableFont_wdth,wght.woff2') format('truetype');
+  font-weight: 100 900;   /* min and max weight */
+  font-stretch: 75% 125%; /* min and max width */
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+    --font-bangla: "Noto Sans Bengali", sans-serif;
+}
+
+@layer components {
+      /* Hide scrollbar but keep scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none; 
+        scrollbar-width: none;  
+    }
+}

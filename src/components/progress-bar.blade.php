@@ -1,0 +1,1 @@
+<div id="progressbar" class="fixed top-0 left-0 h-0.25 bg-rose-700 shadow shadow-rose-600 w-0 transition-all z-50"></div>
