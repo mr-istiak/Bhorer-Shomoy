@@ -9,6 +9,7 @@ use App\Models\Epaper;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 Route::prefix('api')->middleware([VerifyApiRoute::class])->group(function () {
     Route::get('/epaper', function () {
@@ -16,9 +17,19 @@ Route::prefix('api')->middleware([VerifyApiRoute::class])->group(function () {
         $epaper =  Epaper::with([
             'pages' => fn($query) => $query->with('articleBoxes:article_id,bounding_box,epage_id,epaper_id,id,type')->select('id', 'epaper_id', 'page_number', 'image_path')
         ])->latest()->first(['title', 'id', 'created_at']);
-        $epaper->pages = $epaper->pages->map(function($page) use($dpi) {
-           $page->image_path = $page->image_path[$dpi]; 
-        });
+
+        if (! $epaper) {
+            return response()->json(null, 404);
+        }
+
+        $epaper->setRelation('pages', $epaper->pages->map(function($page) use($dpi) {
+           if (is_array($page->image_path) && array_key_exists($dpi, $page->image_path)) {
+               $page->image_path = $page->image_path[$dpi];
+           } else {
+               $page->image_path = $page->image_path ?? null;
+           }
+           return $page;
+        }));
         return response()->json(compact('epaper', 'dpi'));
     })->name('api.epaper.index');
 

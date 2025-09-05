@@ -4,6 +4,19 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    optimizeDeps: {
+        include: ['pdfjs-dist']
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'pdfjs-dist': ['pdfjs-dist']
+                }
+            },
+            external: [],
+        }
+    },
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],

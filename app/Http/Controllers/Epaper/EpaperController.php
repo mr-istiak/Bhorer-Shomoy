@@ -77,9 +77,14 @@ class EpaperController extends Controller
         Gate::authorize('update', Epaper::class);
         $epaper = Epaper::with(['pages:id,epaper_id,page_number,image_path'])->find($epaper, ['id', 'title']);
         if(!$epaper) return abort(404);
-        $epaper->pages = $epaper->pages->map(function($page) {
-            $page->image_path = $page->image_path[RasterDPI::LOW->value];
-        });
+        $epaper->setRelation('pages', $epaper->pages->map(function($page) {
+           if (is_array($page->image_path) && array_key_exists(RasterDPI::LOW->value, $page->image_path)) {
+               $page->image_path = $page->image_path[RasterDPI::LOW->value];
+           } else {
+               $page->image_path = $page->image_path ?? null;
+           }
+           return $page;
+        }));
         return Inertia::render('epaper/Edit', [
             'epaper' => $epaper,
         ]);

@@ -14,14 +14,14 @@ import { QuillEditor } from '@vueup/vue-quill';
 import { Button } from "@/components/ui/button";
 import { makeUrl } from "@/composables/useUrl";
 import { LoaderCircle } from "lucide-vue-next";
-import { ArticleBox, BoundingBox, Epage, Epaper } from "@/types"; 
-import pdfWorker from 'pdfjs-dist/build/pdf.worker?url';
+import { ArticleBox, BoundingBox, Epage } from "@/types"; 
 import InlineHeader from '@/components/InlineHeader.vue';
 import DragSelection from "@/components/DragSelection.vue";
 import { getDocument, GlobalWorkerOptions, } from 'pdfjs-dist';
 import { ref, onMounted, useTemplateRef, computed } from "vue";
 import { extractTextFromSelection, type Image, intersects, pdfToScreenCoords, screenToPdfCoordsN, TextFragment, transformTextToHtml } from "@/composables/usePDFExtractor";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog"
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 // Vite-compatible PDF.js worker
 GlobalWorkerOptions.workerSrc = pdfWorker
 defineOptions({ inheritAttrs: false })
