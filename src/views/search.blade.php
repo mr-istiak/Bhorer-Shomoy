@@ -24,7 +24,6 @@
             <div>
                 <p v-if="posts.length === 0" class="text-2xl font-semibold text-red-900 text-center" title="No Post Found">কোন সংবাদ পৃষ্ঠাটিতে খুঁজে পাওয়া যায়নি</p>
                 <div v-else class="space-y-6">
-                    {{-- <x-post-overview :post="$post" :allow-categories="$categories" :lazy="$index >= $lazy"/> --}}
                     <div v-for="(post, index) in posts" class="flex flex-col-reverse sm:flex-row gap-4">
                         <div class="w-full sm:w-[calc(100%-var(--container-2xs))] md:w-[calc(100%-12rem)] xl:w-[calc(100%-var(--container-2xs))]">
                             <h2 class="font-medium mb-1 text-2xl md:text-xl xl:text-2xl">

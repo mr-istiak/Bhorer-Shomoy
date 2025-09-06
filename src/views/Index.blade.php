@@ -14,26 +14,48 @@
 
     $qurriedmiddlePosts = $mainPosts->slice(0, 9 - $middlePositions->count())->values();
 
-    $middlePosts = collect(range(0, 8))->map(function ($i) use ($middlePositions, &$qurriedmiddlePosts) {
-        // decide the expected slot name
-        if ($i <= 1) $slot = 'featured' . ($i === 0 ? '' : '-2');
-        elseif ($i <= 5) $slot = 'main-' . ($i - 1);
-        else $slot = 'secondary-' . ($i - 5);
-        // use positioned post if available, otherwise fallback
-        return $middlePositions->has($slot) ? $middlePositions[$slot]->post : $qurriedmiddlePosts->shift();
-    });
+    $middlePosts = [];
+    
+    $limit = $middlePositions->count() + $qurriedmiddlePosts->count();
+    
+    for ($i = 0; $i < $limit; $i++) {
+        if ($i <= 1) {
+            $slot = 'featured' . ($i === 0 ? '' : '-2');
+        } elseif ($i <= 5) {
+            $slot = 'main-' . ($i - 1);
+        } else {
+            $slot = 'secondary-' . ($i - 5);
+        }
+    
+        if ($middlePositions->has($slot)) {
+            $middlePosts[] = $middlePositions[$slot]->post;
+        } else {
+            $middlePosts[] = $qurriedmiddlePosts->shift();
+        }
+    }
+    
+    $middlePosts = collect($middlePosts);
 
     $leftPositions = $positions->filter(fn($p) => str_starts_with($p->name, 'left-'))->keyBy('name');
     $leftPosts = collect([]);
     if($mainPosts->count() > (9 - $middlePositions->count())) {
         $quirriedleftPosts = $mainPosts->slice(9 - $middlePositions->count(), 7-$leftPositions->count())->values();
-        $leftPosts = collect(range(0, 6))->map(function ($i) use ($leftPositions, &$quirriedleftPosts) {
-            $slot = 'left-' . ($i + 1);
-            // use positioned post if available, otherwise fallback
-            return $leftPositions->has($slot) ? $leftPositions[$slot]->post : $quirriedleftPosts->shift();
-        });
-    } else $leftPosts = $leftPositions->map(fn($p) => $p->post);
+        $leftPosts = [];
 
+        $limit = $leftPositions->count() + $quirriedleftPosts->count();
+        
+        for ($i = 0; $i < $limit; $i++) {
+            $slot = 'left-' . ($i + 1);
+        
+            if ($leftPositions->has($slot)) {
+                $leftPosts[] = $leftPositions[$slot]->post;
+            } else {
+                $leftPosts[] = $quirriedleftPosts->shift();
+            }
+        }
+        
+        $leftPosts = collect($leftPosts);
+    } else $leftPosts = $leftPositions->map(fn($p) => $p->post);
 @endphp 
 <x-layout.app class="px-4 lg:px-0 gap-12 items-center">
     <div class="w-4/5 h-32 flex bg-black text-white text-center"> 

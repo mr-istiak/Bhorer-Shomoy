@@ -12,12 +12,18 @@
             ->limit(3-$positions->count())
             ->get(); 
     }
-    $posts = collect(range(0, 2))->map(function ($i) use ($positions, &$qurriedposts) {
-        // decide the expected slot name
+    $total = $positions->count() + $qurriedposts->count();
+    $posts = [];
+
+    for ($i = 0; $i < $total; $i++) {
         $slot = 'right-' . ($i + 1);
-        // use positioned post if available, otherwise fallback
-        return $positions->has($slot) ? $positions[$slot]->post : $qurriedposts->shift();
-    })
+    
+        if ($positions->has($slot)) {
+            $posts[] = $positions[$slot]->post;
+        } else {
+            $posts[] = $qurriedposts->shift();
+        }
+    }
 @endphp
 <div class="divide-y divide-red-950">
     @foreach ($posts as $key => $post)
